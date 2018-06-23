@@ -249,7 +249,7 @@ function! s:list(fugitive_repo, log_opts)
   let git_args = ['log'] + default_opts + a:log_opts
   let git_log_cmd = call(a:fugitive_repo.git_command, git_args, a:fugitive_repo)
 
-  let repo_short_name = fnamemodify(substitute(a:fugitive_repo.dir(), '[\\/]\.git[\\/]\?$', '', ''), ':t')
+  let repo_short_name = fnamemodify(a:fugitive_repo.tree(), ':t')
   let b:gv_opts = a:log_opts
   let b:gv_repo_short_name = repo_short_name
   let bufname = repo_short_name.' '.join(a:log_opts)
