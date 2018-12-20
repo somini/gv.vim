@@ -354,12 +354,12 @@ function! s:gv(bang, visual, line1, line2, args) abort
       call s:list(fugitive_repo, log_opts)
       call fugitive#detect(@#)
     endif
-    let t:gv_opts = {
+    let b:gv_opts = {
           \ 'bang' : a:bang,
           \ 'visual' : a:visual,
           \ 'line1' : a:line1,
           \ 'line2' : a:line2,
-          \ 'args' : a:args
+          \ 'args' : a:args,
           \ }
   catch
     return s:warn(v:exception)
@@ -376,7 +376,7 @@ function! s:refresh() abort
 
   let win = winsaveview()
   let old_tab = tabpagenr()
-  call s:gv(t:gv_opts.bang, t:gv_opts.visual, t:gv_opts.line1, t:gv_opts.line2, t:gv_opts.args)
+  call s:gv(b:gv_opts.bang, b:gv_opts.visual, b:gv_opts.line1, b:gv_opts.line2, b:gv_opts.args)
   exec 'tabclose '. old_tab
   call winrestview(win)
 
