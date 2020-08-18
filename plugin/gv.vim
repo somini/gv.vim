@@ -1,3 +1,5 @@
+scriptencoding utf-8
+
 " The MIT License (MIT)
 "
 " Copyright (c) 2016 Junegunn Choi
@@ -66,9 +68,9 @@ function! s:type(visual)
 
   if exists('b:git_origin')
     let syn = synIDattr(synID(line('.'), col('.'), 0), 'name')
-    if syn == 'gvGitHub'
+    if syn ==# 'gvGitHub'
       return ['link', '/issues/'.expand('<cword>')[1:]]
-    elseif syn == 'gvTag'
+    elseif syn ==# 'gvTag'
       let tag = matchstr(getline('.'), '(tag: \zs[^ ,)]\+')
       return ['link', '/releases/'.tag]
     endif
@@ -98,16 +100,16 @@ function! s:open(visual, ...)
 
   if empty(type)
     return s:shrug()
-  elseif type == 'link'
+  elseif type ==# 'link'
     return s:browse(target)
   endif
 
   call s:split(a:0)
   call s:scratch()
-  if type == 'commit'
+  if type ==# 'commit'
     execute 'e' escape(target, ' ')
     nnoremap <silent> <buffer> gb :Gbrowse<cr>
-  elseif type == 'diff'
+  elseif type ==# 'diff'
     call s:fill(target)
     setf diff
   endif
@@ -205,7 +207,7 @@ function! s:setup(git_dir, git_origin)
   let pat = '^\(https\?://\|git@\)\('.domain.'\)[:/]\([^@:/]\+/[^@:/]\{-}\)\%(.git\)\?$'
   let origin = matchlist(a:git_origin, pat)
   if !empty(origin)
-    let scheme = origin[1] =~ '^http' ? origin[1] : 'https://'
+    let scheme = origin[1] =~# '^http' ? origin[1] : 'https://'
     let b:git_origin = printf('%s%s/%s', scheme, origin[2], origin[3])
   endif
   let b:git_dir = a:git_dir
@@ -267,8 +269,8 @@ endfunction
 
 function! s:trim(arg)
   let arg = substitute(a:arg, '\s*$', '', '')
-  return arg =~ "^'.*'$" ? substitute(arg[1:-2], "''", '', 'g')
-     \ : arg =~ '^".*"$' ? substitute(substitute(arg[1:-2], '""', '', 'g'), '\\"', '"', 'g')
+  return arg =~# "^'.*'$" ? substitute(arg[1:-2], "''", '', 'g')
+     \ : arg =~# '^".*"$' ? substitute(substitute(arg[1:-2], '""', '', 'g'), '\\"', '"', 'g')
      \ : substitute(substitute(arg, '""\|''''', '', 'g'), '\\ ', ' ', 'g')
 endfunction
 
@@ -282,7 +284,7 @@ function! gv#shellwords(arg)
     else
       call add(words, trimmed)
     endif
-    let contd = token !~ '\s\+$'
+    let contd = token !~# '\s\+$'
   endfor
   return words
 endfunction
@@ -302,7 +304,7 @@ function! s:gl(buf, visual)
     return
   endif
   tab split
-  silent execute a:visual ? "'<,'>" : "" 'Gllog'
+  silent execute a:visual ? "'<,'>" : '' 'Gllog'
   call setloclist(0, insert(getloclist(0), {'bufnr': a:buf}, 0))
   noautocmd b #
   lopen
@@ -344,7 +346,7 @@ function! s:gv(bang, visual, line1, line2, args) abort
     if cwd !=# root
       execute cd escape(root, ' ')
     endif
-    if a:args =~ '?$'
+    if a:args =~# '?$'
       if len(a:args) > 1
         return s:warn('invalid arguments')
       endif
