@@ -48,4 +48,7 @@ selected lines.
 Customization
 -------------
 
-`¯\_(ツ)_/¯`
+```vim
+# Use horizontal splits instead of vertical
+let g:gv_horizontal = 1
+```
